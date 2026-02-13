@@ -110,7 +110,6 @@
         }
         .btn-si:hover { transform: scale(1.12); box-shadow: 0 8px 50px rgba(255,23,68,.65); }
 
-        /* TASTO NO */
         .btn-no {
             background: rgba(255,255,255,.1); color: rgba(255,255,255,.75);
             border: 2px solid rgba(255,255,255,.25);
@@ -119,7 +118,6 @@
         }
         .btn-no:hover { background: rgba(255,255,255,.15); }
 
-        /* Messaggio fluttuante */
         .float-msg {
             position: fixed; pointer-events: none; z-index: 500;
             color: #ff4081; font-weight: 700; font-size: 1.05em;
@@ -145,7 +143,6 @@
         .celeb-text { color: rgba(255,255,255,.85); font-size: 1.35em; line-height: 1.9; font-weight: 600; }
         .red { color: #ff1744; }
 
-        /* Tasto Continua */
         .btn-next {
             display: inline-block; margin-top: 35px; padding: 16px 55px;
             background: transparent; border: 2px solid #ff1744; color: #ff1744;
@@ -160,7 +157,6 @@
         }
         @keyframes fadeBtn { to { opacity: 1; } }
 
-        /* Coriandoli */
         .confetti {
             position: fixed; pointer-events: none; z-index: 900;
             animation: confDrop linear forwards;
@@ -257,6 +253,20 @@
             color: rgba(255,255,255,.75); font-size: 1.35em; font-weight: 600;
             line-height: 2; text-shadow: 0 0 15px rgba(255,23,68,.15);
         }
+
+        /* ===== TASTO MUTE ===== */
+        .mute-btn {
+            position: fixed; bottom: 25px; right: 25px; z-index: 99999;
+            background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2);
+            color: white; font-size: 1.4em; width: 50px; height: 50px;
+            border-radius: 50%; cursor: pointer; backdrop-filter: blur(8px);
+            transition: all .3s ease; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,.3);
+        }
+        .mute-btn:hover {
+            background: rgba(255,23,68,.25); border-color: rgba(255,23,68,.5);
+            box-shadow: 0 0 20px rgba(255,23,68,.3);
+        }
     </style>
 </head>
 <body>
@@ -346,6 +356,14 @@
     </div>
 </div>
 
+<!-- 🎵 AUDIO DA GOOGLE DRIVE -->
+<audio id="bgMusic" loop preload="auto">
+    <source src="https://docs.google.com/uc?export=download&id=1UOL3_A3fRj_TGstFD02Tkpjt6Ik9quGF" type="audio/mpeg">
+</audio>
+
+<!-- 🔊 TASTO MUTE -->
+<button class="mute-btn" id="muteBtn">🔊</button>
+
 <script>
 // ========================================
 //  STELLE
@@ -379,6 +397,36 @@ setInterval(spawnHeart, 700);
 for (let i = 0; i < 6; i++) setTimeout(spawnHeart, i * 200);
 
 // ========================================
+//  🎵 AUDIO
+// ========================================
+const bgMusic = document.getElementById('bgMusic');
+const muteBtn = document.getElementById('muteBtn');
+let musicStarted = false;
+
+function startMusic() {
+    if (musicStarted) return;
+    musicStarted = true;
+    bgMusic.volume = 0.5;
+    bgMusic.play().catch(() => {
+        musicStarted = false;
+    });
+}
+
+muteBtn.addEventListener('click', () => {
+    if (!musicStarted) {
+        startMusic();
+        return;
+    }
+    if (bgMusic.muted) {
+        bgMusic.muted = false;
+        muteBtn.textContent = '🔊';
+    } else {
+        bgMusic.muted = true;
+        muteBtn.textContent = '🔇';
+    }
+});
+
+// ========================================
 //  INTRO → DOMANDA
 // ========================================
 const intro  = document.getElementById('intro');
@@ -386,6 +434,7 @@ const sceneQ = document.getElementById('sceneQ');
 const twText = document.getElementById('twText');
 
 intro.addEventListener('click', () => {
+    startMusic();
     intro.classList.add('gone');
     setTimeout(() => {
         sceneQ.classList.add('on');
@@ -439,17 +488,15 @@ let msgIdx = 0;
 let firstEscape = true;
 
 function escapeNo() {
-    // Prima volta: stacca dal flow → fixed
     if (firstEscape) {
         const r = btnNo.getBoundingClientRect();
         btnNo.style.position = 'fixed';
         btnNo.style.left = r.left + 'px';
         btnNo.style.top  = r.top + 'px';
-        btnNo.offsetHeight; // forza reflow
+        btnNo.offsetHeight;
         firstEscape = false;
     }
 
-    // Nuova posizione casuale (lontana dal SÌ)
     const pad = 30;
     const bw  = btnNo.offsetWidth;
     const bh  = btnNo.offsetHeight;
@@ -467,14 +514,11 @@ function escapeNo() {
         tries++;
     }
 
-    // Applica — la CSS transition lo fa SCIVOLARE visibilmente
     btnNo.style.left = nx + 'px';
     btnNo.style.top  = ny + 'px';
 
-    // Cambia testo
     btnNo.textContent = noLabels[Math.floor(Math.random() * noLabels.length)];
 
-    // Messaggio divertente
     showMsg(escapeMsgs[msgIdx % escapeMsgs.length]);
     msgIdx++;
 }
@@ -490,7 +534,6 @@ function showMsg(text) {
     setTimeout(() => m.remove(), 2000);
 }
 
-// Appena il cursore TOCCA il bottone → scappa
 btnNo.addEventListener('mouseenter', escapeNo);
 btnNo.addEventListener('click', (e) => { e.preventDefault(); escapeNo(); });
 
@@ -545,8 +588,6 @@ document.getElementById('goToFinale').addEventListener('click', () => {
 // ========================================
 //  EFFETTI
 // ========================================
-
-// Coriandoli (solo ❤️ come emoji)
 function launchConfetti() {
     const colors = ['#ff1744','#ff5252','#fff','#ffeb3b','#ff4081','#f50057','#ff80ab'];
     for (let i = 0; i < 70; i++) {
@@ -570,7 +611,6 @@ function launchConfetti() {
     }
 }
 
-// Pioggia di infiniti + ❤️ (FINALE)
 function startInfinityRain() {
     const box = document.getElementById('infBox');
     const syms = ['∞','∞','∞','∞','♾️','❤️'];
@@ -580,10 +620,8 @@ function startInfinityRain() {
         'rgba(233,30,99,.7)','rgba(255,150,180,.8)'
     ];
 
-    // Burst iniziale
     for (let i = 0; i < 50; i++) setTimeout(() => spawnInf(box, syms, colors), i * 40);
 
-    // Continuo
     setInterval(() => {
         for (let i = 0; i < 4; i++) setTimeout(() => spawnInf(box, syms, colors), i * 50);
     }, 150);
