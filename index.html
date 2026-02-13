@@ -13,7 +13,6 @@
             user-select: none;
         }
 
-        /* ========== SFONDO ========== */
         .bg { position: fixed; inset: 0; z-index: 0; }
         .bg-grad {
             position: absolute; inset: 0;
@@ -31,7 +30,6 @@
             50% { opacity: .9; transform: scale(1.6); }
         }
 
-        /* ========== CUORI FLUTTUANTI ========== */
         .hearts-layer { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
         .fl-heart {
             position: absolute; opacity: 0;
@@ -45,7 +43,6 @@
             100% { transform: translateY(-8vh) rotate(360deg) scale(1); opacity: 0; }
         }
 
-        /* ========== INTRO ========== */
         .intro {
             position: fixed; inset: 0; background: #000; z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -62,7 +59,6 @@
         }
         @keyframes rise { to { opacity: 1; transform: translateY(0); } from { opacity: 0; transform: translateY(18px); } }
 
-        /* ========== SCENA DOMANDA ========== */
         .scene-question {
             position: fixed; inset: 0; z-index: 10;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -96,7 +92,6 @@
         }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* ===== BOTTONI ===== */
         .btns { display: flex; gap: 50px; transition: opacity .5s; }
         .btn {
             padding: 18px 65px; border-radius: 55px; font-size: 1.45em;
@@ -130,7 +125,6 @@
             100% { opacity: 0; transform: translateY(-45px); }
         }
 
-        /* ===== CELEBRAZIONE ===== */
         .celeb-box {
             text-align: center; opacity: 0; pointer-events: none;
             transition: opacity 1s ease; margin-top: 20px;
@@ -166,7 +160,6 @@
             100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
         }
 
-        /* ===== SCENA CENA ===== */
         .scene-dinner {
             position: fixed; inset: 0; background: #050000; z-index: 400;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -203,7 +196,6 @@
             margin-bottom: 5px; text-align: center;
         }
 
-        /* ===== SCENA FINALE ===== */
         .scene-finale {
             position: fixed; inset: 0; background: #000; z-index: 600;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -254,7 +246,6 @@
             line-height: 2; text-shadow: 0 0 15px rgba(255,23,68,.15);
         }
 
-        /* ===== TASTO MUTE ===== */
         .mute-btn {
             position: fixed; bottom: 25px; right: 25px; z-index: 99999;
             background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2);
@@ -271,34 +262,28 @@
 </head>
 <body>
 
-<!-- SFONDO -->
 <div class="bg">
     <div class="bg-grad"></div>
     <div id="starsBox"></div>
 </div>
 <div class="hearts-layer" id="heartsBox"></div>
 
-<!-- 1 · INTRO -->
 <div class="intro" id="intro">
     <h1>Ho una domanda per te...</h1>
     <p>▶ Clicca per iniziare</p>
 </div>
 
-<!-- 2 · DOMANDA -->
 <div class="scene-question" id="sceneQ">
     <div class="chars" id="chars">
         <div class="char-pic char-koala"><img src="https://i.imgur.com/57Zp6wD.jpeg" alt="Koala"></div>
         <div class="heart-mid">❤️</div>
         <div class="char-pic char-bunny"><img src="https://i.imgur.com/odRmy9X.jpeg" alt="Coniglietta"></div>
     </div>
-
     <div class="tw-box"><div class="tw-text" id="twText"></div></div>
-
     <div class="btns" id="btns">
         <button class="btn btn-si" id="btnSi">SÌ! ❤️</button>
         <button class="btn btn-no" id="btnNo">No...</button>
     </div>
-
     <div class="celeb-box" id="celeb">
         <div class="celeb-title">SIIIII! 🎉❤️❤️🎉</div>
         <div class="celeb-text">
@@ -310,7 +295,6 @@
     </div>
 </div>
 
-<!-- 3 · CENA -->
 <div class="scene-dinner" id="sceneDinner">
     <div class="dinner-title">Ma non è finita qui...</div>
     <div class="dinner-sub">
@@ -338,7 +322,6 @@
     <button class="btn-next" id="goToFinale">Continua →</button>
 </div>
 
-<!-- 4 · FINALE INFINITO -->
 <div class="scene-finale" id="sceneFinale">
     <div class="inf-container" id="infBox"></div>
     <div class="finale-glow"></div>
@@ -356,18 +339,15 @@
     </div>
 </div>
 
-<!-- 🎵 AUDIO DAL REPOSITORY -->
+<!-- 🎵 AUDIO -->
 <audio id="bgMusic" loop preload="auto">
-    <source src="yiruma.mp3" type="audio/mpeg">
+    <source src="yiruma.mp3.mp3" type="audio/mpeg">
 </audio>
 
 <!-- 🔊 TASTO MUTE -->
 <button class="mute-btn" id="muteBtn">🔊</button>
 
 <script>
-// ========================================
-//  STELLE
-// ========================================
 const starsBox = document.getElementById('starsBox');
 for (let i = 0; i < 90; i++) {
     const s = document.createElement('div');
@@ -380,9 +360,6 @@ for (let i = 0; i < 90; i++) {
     starsBox.appendChild(s);
 }
 
-// ========================================
-//  CUORI FLUTTUANTI (SOLO ❤️)
-// ========================================
 const heartsBox = document.getElementById('heartsBox');
 function spawnHeart() {
     const h = document.createElement('div');
@@ -396,9 +373,6 @@ function spawnHeart() {
 setInterval(spawnHeart, 700);
 for (let i = 0; i < 6; i++) setTimeout(spawnHeart, i * 200);
 
-// ========================================
-//  🎵 AUDIO
-// ========================================
 const bgMusic = document.getElementById('bgMusic');
 const muteBtn = document.getElementById('muteBtn');
 let musicStarted = false;
@@ -426,9 +400,6 @@ muteBtn.addEventListener('click', () => {
     }
 });
 
-// ========================================
-//  INTRO → DOMANDA
-// ========================================
 const intro  = document.getElementById('intro');
 const sceneQ = document.getElementById('sceneQ');
 const twText = document.getElementById('twText');
@@ -460,9 +431,6 @@ function typeWrite(str) {
     })();
 }
 
-// ========================================
-//  TASTO NO — SCIVOLA, MAI SPARISCE
-// ========================================
 const btnNo = document.getElementById('btnNo');
 const btnSi = document.getElementById('btnSi');
 const btns  = document.getElementById('btns');
@@ -537,9 +505,6 @@ function showMsg(text) {
 btnNo.addEventListener('mouseenter', escapeNo);
 btnNo.addEventListener('click', (e) => { e.preventDefault(); escapeNo(); });
 
-// ========================================
-//  TASTO SÌ → CELEBRAZIONE
-// ========================================
 const chars = document.getElementById('chars');
 const celeb = document.getElementById('celeb');
 
@@ -557,9 +522,6 @@ btnSi.addEventListener('click', () => {
     }, 700);
 });
 
-// ========================================
-//  NAVIGAZIONE SCENE
-// ========================================
 const sceneDinner = document.getElementById('sceneDinner');
 const sceneFinale = document.getElementById('sceneFinale');
 
@@ -585,9 +547,6 @@ document.getElementById('goToFinale').addEventListener('click', () => {
     }, 1200);
 });
 
-// ========================================
-//  EFFETTI
-// ========================================
 function launchConfetti() {
     const colors = ['#ff1744','#ff5252','#fff','#ffeb3b','#ff4081','#f50057','#ff80ab'];
     for (let i = 0; i < 70; i++) {
