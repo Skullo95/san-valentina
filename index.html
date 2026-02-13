@@ -37,6 +37,7 @@
             100%{transform:translateY(-8vh) rotate(360deg) scale(1);opacity:0;}
         }
 
+        /* ===== INTRO ===== */
         .intro {
             position: fixed; inset: 0; background: #000; z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -56,10 +57,11 @@
         /* ===== SCENA DOMANDA ===== */
         .scene-question {
             position: fixed; inset: 0; z-index: 10;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            padding-top: 25px;
             opacity: 0; pointer-events: none; transition: opacity 1.5s ease;
         }
-        .scene-question.on { opacity: 1; pointer-events: auto; }
+        .scene-question.on { display: flex; opacity: 1; pointer-events: auto; }
 
         .chars { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
         .char-pic {
@@ -76,9 +78,10 @@
 
         .tw-box {
             text-align: center; margin-bottom: 30px; min-height: 70px;
-            transition: opacity .6s ease;
+            transition: opacity .5s ease, max-height .5s ease;
+            overflow: hidden; max-height: 100px;
         }
-        .tw-box.hide { opacity: 0; }
+        .tw-box.hide { opacity: 0; max-height: 0; margin-bottom: 0; }
         .tw-text {
             font-family: 'Dancing Script', cursive; font-size: 3.2em; color: #ff1744;
             text-shadow: 0 0 25px rgba(255,23,68,.5);
@@ -194,11 +197,7 @@
             overflow: hidden;
             margin: 0 auto 20px;
             background: radial-gradient(circle at 50% 45%,
-                #ddb8a8 0%,
-                #b87068 30%,
-                #6b2535 55%,
-                #2a0e18 78%,
-                #0d0408 100%
+                #ddb8a8 0%, #b87068 30%, #6b2535 55%, #2a0e18 78%, #0d0408 100%
             );
             isolation: isolate;
             border: 1px solid rgba(255,23,68,.2);
@@ -210,11 +209,9 @@
         }
 
         .menu-img {
-            position: absolute;
-            top: 50%; left: 50%;
+            position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 80%; height: 80%;
-            object-fit: contain;
+            width: 80%; height: 80%; object-fit: contain;
             mix-blend-mode: multiply;
             filter: contrast(1.2) saturate(1.35) brightness(1.05);
             transition: transform .4s ease;
@@ -223,13 +220,8 @@
             transform: translate(-50%, -50%) scale(1.06);
         }
 
-        .menu-name {
-            color: #ff4081; font-weight: 700; font-size: 1.2em;
-            margin-bottom: 3px;
-        }
-        .menu-desc {
-            color: rgba(255,255,255,.4); font-size: .88em; font-style: italic;
-        }
+        .menu-name { color: #ff4081; font-weight: 700; font-size: 1.2em; margin-bottom: 3px; }
+        .menu-desc { color: rgba(255,255,255,.4); font-size: .88em; font-style: italic; }
 
         .dinner-footer {
             color: rgba(255,255,255,.7); font-size: 1.1em; font-weight: 600;
@@ -484,16 +476,35 @@ const intro = document.getElementById('intro');
 const sceneQ = document.getElementById('sceneQ');
 const twText = document.getElementById('twText');
 const twBox = document.getElementById('twBox');
+
 intro.addEventListener('click', () => {
-    startMusic(); intro.classList.add('gone');
-    setTimeout(() => { sceneQ.classList.add('on'); typeWrite('Vuoi essere la mia Valentina?'); }, 1200);
+    startMusic();
+    intro.classList.add('gone');
+    // Mostra la scena dopo che l'intro svanisce
+    setTimeout(() => {
+        intro.style.display = 'none';
+        sceneQ.classList.add('on');
+        // Piccolo ritardo per far partire l'animazione opacity dopo display:flex
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                typeWrite('Vuoi essere la mia Valentina?');
+            });
+        });
+    }, 1600);
 });
+
 function typeWrite(str) {
     let i = 0; twText.textContent = '';
     const cursor = document.createElement('span'); cursor.className = 'tw-cursor'; twText.appendChild(cursor);
     (function tick() {
-        if (i < str.length) { twText.textContent = str.slice(0, i+1); twText.appendChild(cursor); i++; setTimeout(tick, 65+Math.random()*35); }
-        else setTimeout(() => cursor.remove(), 600);
+        if (i < str.length) {
+            twText.textContent = str.slice(0, i + 1);
+            twText.appendChild(cursor);
+            i++;
+            setTimeout(tick, 65 + Math.random() * 35);
+        } else {
+            setTimeout(() => cursor.remove(), 600);
+        }
     })();
 }
 
@@ -549,16 +560,12 @@ btnNo.addEventListener('click', e => { e.preventDefault(); escapeNo(); });
 const chars = document.getElementById('chars');
 const celeb = document.getElementById('celeb');
 btnSi.addEventListener('click', () => {
-    // Nascondi bottoni e testo domanda
     btns.style.opacity = '0';
     btns.style.pointerEvents = 'none';
     btnNo.style.display = 'none';
     twBox.classList.add('hide');
-
-    // Avvicina i personaggi
     chars.classList.add('together');
 
-    // Mostra celebrazione
     setTimeout(() => {
         celeb.classList.add('on');
         launchConfetti();
@@ -571,14 +578,25 @@ const sceneDinner = document.getElementById('sceneDinner');
 const sceneFinale = document.getElementById('sceneFinale');
 
 document.getElementById('goToDinner').addEventListener('click', () => {
-    sceneQ.style.transition = 'opacity 1s'; sceneQ.style.opacity = '0'; sceneQ.style.pointerEvents = 'none';
-    setTimeout(() => { sceneDinner.classList.add('on'); launchConfetti(); }, 1000);
+    sceneQ.style.transition = 'opacity 1s';
+    sceneQ.style.opacity = '0';
+    sceneQ.style.pointerEvents = 'none';
+    setTimeout(() => {
+        sceneQ.style.display = 'none';
+        sceneDinner.classList.add('on');
+        launchConfetti();
+    }, 1000);
 });
 
 document.getElementById('goToFinale').addEventListener('click', () => {
-    sceneDinner.style.transition = 'opacity 1.2s'; sceneDinner.style.opacity = '0'; sceneDinner.style.pointerEvents = 'none';
+    sceneDinner.style.transition = 'opacity 1.2s';
+    sceneDinner.style.opacity = '0';
+    sceneDinner.style.pointerEvents = 'none';
     setTimeout(() => {
-        sceneFinale.classList.add('on'); startInfinityRain(); launchConfetti();
+        sceneDinner.style.display = 'none';
+        sceneFinale.classList.add('on');
+        startInfinityRain();
+        launchConfetti();
         for (let i = 0; i < 40; i++) setTimeout(spawnHeart, i * 50);
     }, 1200);
 });
@@ -590,6 +608,7 @@ document.getElementById('cosmicTrigger').addEventListener('click', () => {
     sceneFinale.style.pointerEvents = 'none';
     fadeOutBgMusic(1500);
     setTimeout(() => {
+        sceneFinale.style.display = 'none';
         document.getElementById('sceneCosmic').classList.add('on');
         initCosmicInfinity();
         setTimeout(() => { fadeInEmptySound(0.6, 2000); }, 500);
