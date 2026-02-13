@@ -57,13 +57,16 @@
         /* ===== SCENA DOMANDA ===== */
         .scene-question {
             position: fixed; inset: 0; z-index: 10;
-            display: none; flex-direction: column; justify-content: center; align-items: center;
-            padding-top: 25px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: opacity 1.5s ease;
         }
-        .scene-question.on { display: flex; opacity: 1; pointer-events: auto; }
+        .scene-question.on { opacity: 1; pointer-events: auto; }
 
-        .chars { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+        .chars {
+            display: flex; align-items: center; gap: 15px;
+            margin-bottom: 25px;
+            transition: margin .6s ease;
+        }
         .char-pic {
             width: 155px; height: 155px; border-radius: 50%; overflow: hidden;
             border: 4px solid #ff1744; box-shadow: 0 0 35px rgba(255,23,68,.45);
@@ -77,11 +80,12 @@
         .chars.together .char-pic { box-shadow: 0 0 60px rgba(255,23,68,.6), 0 0 120px rgba(255,23,68,.2); }
 
         .tw-box {
-            text-align: center; margin-bottom: 30px; min-height: 70px;
-            transition: opacity .5s ease, max-height .5s ease;
-            overflow: hidden; max-height: 100px;
+            text-align: center; margin-bottom: 30px;
+            min-height: 70px; max-height: 120px;
+            transition: all .5s ease;
+            overflow: hidden;
         }
-        .tw-box.hide { opacity: 0; max-height: 0; margin-bottom: 0; }
+        .tw-box.hide { opacity: 0; min-height: 0; max-height: 0; margin: 0; }
         .tw-text {
             font-family: 'Dancing Script', cursive; font-size: 3.2em; color: #ff1744;
             text-shadow: 0 0 25px rgba(255,23,68,.5);
@@ -92,7 +96,16 @@
         }
         @keyframes blink {50%{opacity:0;}}
 
-        .btns { display: flex; gap: 50px; transition: opacity .5s; }
+        .btns {
+            display: flex; gap: 50px;
+            max-height: 80px;
+            transition: all .5s ease;
+            overflow: visible;
+        }
+        .btns.hide {
+            opacity: 0; pointer-events: none;
+            max-height: 0; overflow: hidden; margin: 0;
+        }
         .btn {
             padding: 18px 65px; border-radius: 55px; font-size: 1.45em;
             font-family: 'Quicksand', sans-serif; font-weight: 700;
@@ -120,25 +133,29 @@
         }
         @keyframes msgUp {0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-45px);}}
 
-        /* CELEB BOX */
+        /* CELEB BOX — posizione assoluta, non influenza il flex */
         .celeb-box {
+            position: absolute;
+            top: calc(50% + 75px);
+            left: 50%;
+            transform: translateX(-50%);
             text-align: center;
+            width: 90%; max-width: 600px;
             opacity: 0; pointer-events: none;
             transition: opacity 1s ease;
-            margin-top: 10px;
         }
         .celeb-box.on { opacity: 1; pointer-events: auto; }
         .celeb-title {
-            font-family: 'Dancing Script', cursive; font-size: 3.8em; color: #ff1744;
-            text-shadow: 0 0 40px rgba(255,23,68,.55); margin-bottom: 12px;
+            font-family: 'Dancing Script', cursive; font-size: 3.5em; color: #ff1744;
+            text-shadow: 0 0 40px rgba(255,23,68,.55); margin-bottom: 10px;
         }
-        .celeb-text { color: rgba(255,255,255,.85); font-size: 1.35em; line-height: 1.9; font-weight: 600; }
+        .celeb-text { color: rgba(255,255,255,.85); font-size: 1.3em; line-height: 1.8; font-weight: 600; }
         .red { color: #ff1744; }
 
         .btn-next {
-            display: inline-block; margin-top: 35px; padding: 16px 55px;
+            display: inline-block; margin-top: 30px; padding: 14px 50px;
             background: transparent; border: 2px solid #ff1744; color: #ff1744;
-            font-size: 1.25em; font-family: 'Quicksand', sans-serif; font-weight: 700;
+            font-size: 1.2em; font-family: 'Quicksand', sans-serif; font-weight: 700;
             border-radius: 50px; cursor: pointer; transition: all .35s ease;
             opacity: 0; animation: fadeBtn 1s ease 1.5s forwards;
         }
@@ -193,8 +210,7 @@
         .menu-icon {
             position: relative;
             width: 100px; height: 100px;
-            border-radius: 50%;
-            overflow: hidden;
+            border-radius: 50%; overflow: hidden;
             margin: 0 auto 20px;
             background: radial-gradient(circle at 50% 45%,
                 #ddb8a8 0%, #b87068 30%, #6b2535 55%, #2a0e18 78%, #0d0408 100%
@@ -216,9 +232,7 @@
             filter: contrast(1.2) saturate(1.35) brightness(1.05);
             transition: transform .4s ease;
         }
-        .menu-card:hover .menu-img {
-            transform: translate(-50%, -50%) scale(1.06);
-        }
+        .menu-card:hover .menu-img { transform: translate(-50%, -50%) scale(1.06); }
 
         .menu-name { color: #ff4081; font-weight: 700; font-size: 1.2em; margin-bottom: 3px; }
         .menu-desc { color: rgba(255,255,255,.4); font-size: .88em; font-style: italic; }
@@ -232,7 +246,7 @@
         .scene-finale {
             position: fixed; inset: 0; background: #000; z-index: 600;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: opacity 2s ease; overflow: hidden;
+            opacity: 0; pointer-events: none; transition: opacity 1.5s ease; overflow: hidden;
         }
         .scene-finale.on { opacity: 1; pointer-events: auto; }
         .inf-container { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
@@ -435,7 +449,8 @@ const emptySound = document.getElementById('emptySound');
 let musicStarted = false;
 
 function startMusic() {
-    if (musicStarted) return; musicStarted = true;
+    if (musicStarted) return;
+    musicStarted = true;
     bgMusic.volume = 0.5;
     bgMusic.play().catch(() => { musicStarted = false; });
 }
@@ -480,22 +495,18 @@ const twBox = document.getElementById('twBox');
 intro.addEventListener('click', () => {
     startMusic();
     intro.classList.add('gone');
-    // Mostra la scena dopo che l'intro svanisce
     setTimeout(() => {
-        intro.style.display = 'none';
         sceneQ.classList.add('on');
-        // Piccolo ritardo per far partire l'animazione opacity dopo display:flex
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                typeWrite('Vuoi essere la mia Valentina?');
-            });
-        });
-    }, 1600);
+        typeWrite('Vuoi essere la mia Valentina?');
+    }, 1500);
 });
 
 function typeWrite(str) {
-    let i = 0; twText.textContent = '';
-    const cursor = document.createElement('span'); cursor.className = 'tw-cursor'; twText.appendChild(cursor);
+    let i = 0;
+    twText.textContent = '';
+    const cursor = document.createElement('span');
+    cursor.className = 'tw-cursor';
+    twText.appendChild(cursor);
     (function tick() {
         if (i < str.length) {
             twText.textContent = str.slice(0, i + 1);
@@ -546,31 +557,38 @@ function escapeNo() {
     showMsg(escapeMsgs[msgIdx % escapeMsgs.length]);
     msgIdx++;
 }
+
 function showMsg(text) {
     const m = document.createElement('div'); m.className = 'float-msg'; m.textContent = text;
     const r = btnNo.getBoundingClientRect();
     m.style.left = Math.min(r.left, window.innerWidth - 350) + 'px';
     m.style.top = Math.max(10, r.top - 45) + 'px';
-    document.body.appendChild(m); setTimeout(() => m.remove(), 2000);
+    document.body.appendChild(m);
+    setTimeout(() => m.remove(), 2000);
 }
+
 btnNo.addEventListener('mouseenter', escapeNo);
 btnNo.addEventListener('click', e => { e.preventDefault(); escapeNo(); });
 
 // ===== SÌ =====
 const chars = document.getElementById('chars');
 const celeb = document.getElementById('celeb');
+
 btnSi.addEventListener('click', () => {
-    btns.style.opacity = '0';
-    btns.style.pointerEvents = 'none';
-    btnNo.style.display = 'none';
+    // Nascondi testo e bottoni con collasso
     twBox.classList.add('hide');
+    btns.classList.add('hide');
+    btnNo.style.display = 'none';
+
+    // Avvicina personaggi
     chars.classList.add('together');
 
+    // Mostra celebrazione dopo il collasso
     setTimeout(() => {
         celeb.classList.add('on');
         launchConfetti();
         for (let i = 0; i < 30; i++) setTimeout(spawnHeart, i * 60);
-    }, 700);
+    }, 600);
 });
 
 // ===== NAVIGAZIONE =====
@@ -578,37 +596,28 @@ const sceneDinner = document.getElementById('sceneDinner');
 const sceneFinale = document.getElementById('sceneFinale');
 
 document.getElementById('goToDinner').addEventListener('click', () => {
-    sceneQ.style.transition = 'opacity 1s';
-    sceneQ.style.opacity = '0';
-    sceneQ.style.pointerEvents = 'none';
+    sceneQ.classList.remove('on');
     setTimeout(() => {
-        sceneQ.style.display = 'none';
         sceneDinner.classList.add('on');
         launchConfetti();
-    }, 1000);
+    }, 1500);
 });
 
 document.getElementById('goToFinale').addEventListener('click', () => {
-    sceneDinner.style.transition = 'opacity 1.2s';
-    sceneDinner.style.opacity = '0';
-    sceneDinner.style.pointerEvents = 'none';
+    sceneDinner.classList.remove('on');
     setTimeout(() => {
-        sceneDinner.style.display = 'none';
         sceneFinale.classList.add('on');
         startInfinityRain();
         launchConfetti();
         for (let i = 0; i < 40; i++) setTimeout(spawnHeart, i * 50);
-    }, 1200);
+    }, 1500);
 });
 
 // ===== TRIGGER COSMICO =====
 document.getElementById('cosmicTrigger').addEventListener('click', () => {
-    sceneFinale.style.transition = 'opacity 1.5s';
-    sceneFinale.style.opacity = '0';
-    sceneFinale.style.pointerEvents = 'none';
+    sceneFinale.classList.remove('on');
     fadeOutBgMusic(1500);
     setTimeout(() => {
-        sceneFinale.style.display = 'none';
         document.getElementById('sceneCosmic').classList.add('on');
         initCosmicInfinity();
         setTimeout(() => { fadeInEmptySound(0.6, 2000); }, 500);
@@ -630,7 +639,8 @@ function launchConfetti() {
             }
             c.style.left = Math.random() * 100 + 'vw';
             c.style.animationDuration = (2.5 + Math.random() * 2.5) + 's';
-            document.body.appendChild(c); setTimeout(() => c.remove(), 5500);
+            document.body.appendChild(c);
+            setTimeout(() => c.remove(), 5500);
         }, i * 45);
     }
 }
@@ -648,7 +658,8 @@ function spawnInf(box, syms, colors) {
     el.textContent = syms[Math.floor(Math.random() * syms.length)];
     const sz = 20 + Math.random() * 45, dur = 3 + Math.random() * 5, op = .4 + Math.random() * .55;
     el.style.cssText = `left:${Math.random()*100}%;font-size:${sz}px;color:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${dur}s;--o:${op};`;
-    box.appendChild(el); setTimeout(() => el.remove(), (dur + 1) * 1000);
+    box.appendChild(el);
+    setTimeout(() => el.remove(), (dur + 1) * 1000);
 }
 
 // =============================================
@@ -786,7 +797,8 @@ function initCosmicInfinity() {
 window.addEventListener('resize', () => {
     const canvas = document.getElementById('cosmicCanvas');
     if (canvas && document.getElementById('sceneCosmic').classList.contains('on')) {
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
     }
 });
 </script>
