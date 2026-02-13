@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Per la mia Valentina 💕</title>
+    <title>Per la mia Valentina ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ========== RESET ========== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             width: 100vw; height: 100vh; overflow: hidden;
@@ -63,7 +62,7 @@
         }
         @keyframes rise { to { opacity: 1; transform: translateY(0); } from { opacity: 0; transform: translateY(18px); } }
 
-        /* ========== SCENA: DOMANDA ========== */
+        /* ========== SCENA DOMANDA ========== */
         .scene-question {
             position: fixed; inset: 0; z-index: 10;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -71,7 +70,6 @@
         }
         .scene-question.on { opacity: 1; pointer-events: auto; }
 
-        /* Personaggi */
         .chars { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
         .char-pic {
             width: 155px; height: 155px; border-radius: 50%; overflow: hidden;
@@ -82,12 +80,10 @@
         .heart-mid { font-size: 48px; animation: pulse 1.2s ease-in-out infinite; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.25); } }
 
-        /* Insieme dopo il SÌ */
         .chars.together .char-koala { transform: translateX(45px); }
         .chars.together .char-bunny { transform: translateX(-45px); }
         .chars.together .char-pic { box-shadow: 0 0 60px rgba(255,23,68,.6), 0 0 120px rgba(255,23,68,.2); }
 
-        /* Testo typewriter */
         .tw-box { text-align: center; margin-bottom: 30px; min-height: 70px; }
         .tw-text {
             font-family: 'Dancing Script', cursive; font-size: 3.2em; color: #ff1744;
@@ -114,12 +110,12 @@
         }
         .btn-si:hover { transform: scale(1.12); box-shadow: 0 8px 50px rgba(255,23,68,.65); }
 
-        /* ===== TASTO NO — SCIVOLA, MAI SPARISCE ===== */
+        /* TASTO NO */
         .btn-no {
             background: rgba(255,255,255,.1); color: rgba(255,255,255,.75);
             border: 2px solid rgba(255,255,255,.25);
-            /* transizione fluida: lo vedi SCORRERE sullo schermo */
             transition: left .35s ease-out, top .35s ease-out;
+            position: relative;
         }
         .btn-no:hover { background: rgba(255,255,255,.15); }
 
@@ -147,9 +143,9 @@
             text-shadow: 0 0 40px rgba(255,23,68,.55); margin-bottom: 12px;
         }
         .celeb-text { color: rgba(255,255,255,.85); font-size: 1.35em; line-height: 1.9; font-weight: 600; }
-        .pink { color: #ff4081; }
+        .red { color: #ff1744; }
 
-        /* Tasto Continua universale */
+        /* Tasto Continua */
         .btn-next {
             display: inline-block; margin-top: 35px; padding: 16px 55px;
             background: transparent; border: 2px solid #ff1744; color: #ff1744;
@@ -174,7 +170,7 @@
             100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
         }
 
-        /* ===== SCENA: CENA ===== */
+        /* ===== SCENA CENA ===== */
         .scene-dinner {
             position: fixed; inset: 0; background: #050000; z-index: 400;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -211,7 +207,7 @@
             margin-bottom: 5px; text-align: center;
         }
 
-        /* ===== SCENA: FINALE INFINITO ===== */
+        /* ===== SCENA FINALE ===== */
         .scene-finale {
             position: fixed; inset: 0; background: #000; z-index: 600;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -282,23 +278,23 @@
 <div class="scene-question" id="sceneQ">
     <div class="chars" id="chars">
         <div class="char-pic char-koala"><img src="https://i.imgur.com/57Zp6wD.jpeg" alt="Koala"></div>
-        <div class="heart-mid">💕</div>
+        <div class="heart-mid">❤️</div>
         <div class="char-pic char-bunny"><img src="https://i.imgur.com/odRmy9X.jpeg" alt="Coniglietta"></div>
     </div>
 
     <div class="tw-box"><div class="tw-text" id="twText"></div></div>
 
     <div class="btns" id="btns">
-        <button class="btn btn-si" id="btnSi">SÌ! 💖</button>
+        <button class="btn btn-si" id="btnSi">SÌ! ❤️</button>
         <button class="btn btn-no" id="btnNo">No...</button>
     </div>
 
     <div class="celeb-box" id="celeb">
-        <div class="celeb-title">SIIIII! 🎉🩷🩷🎉</div>
+        <div class="celeb-title">SIIIII! 🎉❤️❤️🎉</div>
         <div class="celeb-text">
-            Lo sapevo <span class="pink">🩷</span><br>
-            Ti amo more than tantissimo <span class="pink">🩷</span><br>
-            Sarà un San Valentino bellissimo <span class="pink">🩷</span>
+            Lo sapevo <span class="red">❤️</span><br>
+            Ti amo more than tantissimo <span class="red">❤️</span><br>
+            Sarà un San Valentino bellissimo <span class="red">❤️</span>
         </div>
         <button class="btn-next" id="goToDinner">Continua →</button>
     </div>
@@ -328,7 +324,7 @@
             <div class="menu-desc">a tua scelta</div>
         </div>
     </div>
-    <div class="dinner-footer">Perché la mia Coniglietta merita solo il meglio 🩷</div>
+    <div class="dinner-footer">Perché la mia Coniglietta merita solo il meglio ❤️</div>
     <button class="btn-next" id="goToFinale">Continua →</button>
 </div>
 
@@ -344,18 +340,16 @@
         </div>
         <div class="finale-title">Per Sempre</div>
         <div class="finale-sub">
-            Io e te, senza fine <span class="pink">∞</span><br>
-            In questa vita e in tutte le altre <span class="pink">🩷</span>
+            Io e te, senza fine <span class="red">∞</span><br>
+            In questa vita e in tutte le altre <span class="red">❤️</span>
         </div>
     </div>
 </div>
 
 <script>
 // ========================================
-//  SETUP
+//  STELLE
 // ========================================
-
-// Stelle
 const starsBox = document.getElementById('starsBox');
 for (let i = 0; i < 90; i++) {
     const s = document.createElement('div');
@@ -368,13 +362,14 @@ for (let i = 0; i < 90; i++) {
     starsBox.appendChild(s);
 }
 
-// Cuori fluttuanti
+// ========================================
+//  CUORI FLUTTUANTI (SOLO ❤️)
+// ========================================
 const heartsBox = document.getElementById('heartsBox');
-const hEmoji = ['💕','💖','💗','💓','💝','❤️','🩷','🤍','💘'];
 function spawnHeart() {
     const h = document.createElement('div');
     h.className = 'fl-heart';
-    h.textContent = hEmoji[Math.floor(Math.random() * hEmoji.length)];
+    h.textContent = '❤️';
     const dur = 5 + Math.random() * 6;
     h.style.cssText = `left:${Math.random()*100}%;font-size:${14+Math.random()*18}px;animation-duration:${dur}s;`;
     heartsBox.appendChild(h);
@@ -386,9 +381,9 @@ for (let i = 0; i < 6; i++) setTimeout(spawnHeart, i * 200);
 // ========================================
 //  INTRO → DOMANDA
 // ========================================
-const intro   = document.getElementById('intro');
-const sceneQ  = document.getElementById('sceneQ');
-const twText  = document.getElementById('twText');
+const intro  = document.getElementById('intro');
+const sceneQ = document.getElementById('sceneQ');
+const twText = document.getElementById('twText');
 
 intro.addEventListener('click', () => {
     intro.classList.add('gone');
@@ -417,23 +412,23 @@ function typeWrite(str) {
 }
 
 // ========================================
-//  TASTO NO — SCIVOLA VIA, SEMPRE VISIBILE
+//  TASTO NO — SCIVOLA, MAI SPARISCE
 // ========================================
-const btnNo  = document.getElementById('btnNo');
-const btnSi  = document.getElementById('btnSi');
-const btns   = document.getElementById('btns');
+const btnNo = document.getElementById('btnNo');
+const btnSi = document.getElementById('btnSi');
+const btns  = document.getElementById('btns');
 
 const escapeMsgs = [
     "Hey, quel pulsante NO sta scappando 💨",
     "Il NO è un po' timido 🫣",
     "Ops, è scivolato 🤷🏻",
-    "Dai su, lo sai che mi ami 🩷",
+    "Dai su, lo sai che mi ami ❤️",
     "Non è un'opzione valida 😠",
     "Quasi preso! Ma no 😏...",
-    "Koalino ti implora...🩷",
+    "Koalino ti implora... ❤️",
     "La coniglietta dice SÌ! 🐰🎀",
     "Quel bottone ha le gambe 🦵🏻",
-    "Arrendersi è l'unica via 🩷",
+    "Arrendersi è l'unica via ❤️",
     "Sei veloce, ma lui di più ⚡",
     "Hannika ti odierebbe 🐶"
 ];
@@ -444,18 +439,17 @@ let msgIdx = 0;
 let firstEscape = true;
 
 function escapeNo() {
-    // 1 — La prima volta lo stacchiamo dal flow e lo rendiamo fixed
+    // Prima volta: stacca dal flow → fixed
     if (firstEscape) {
         const r = btnNo.getBoundingClientRect();
         btnNo.style.position = 'fixed';
         btnNo.style.left = r.left + 'px';
         btnNo.style.top  = r.top + 'px';
-        // forza reflow per far partire la transition dalla posizione corretta
-        btnNo.offsetHeight;          
+        btnNo.offsetHeight; // forza reflow
         firstEscape = false;
     }
 
-    // 2 — Calcola una nuova posizione casuale
+    // Nuova posizione casuale (lontana dal SÌ)
     const pad = 30;
     const bw  = btnNo.offsetWidth;
     const bh  = btnNo.offsetHeight;
@@ -468,20 +462,19 @@ function escapeNo() {
     while (!ok && tries < 50) {
         nx = pad + Math.random() * (maxX - pad);
         ny = pad + Math.random() * (maxY - pad);
-        // Deve stare lontano dal SÌ
         const dist = Math.hypot(nx - yesR.left, ny - yesR.top);
         if (dist > 220) ok = true;
         tries++;
     }
 
-    // 3 — Applica (la CSS transition lo fa scivolare visibilmente)
+    // Applica — la CSS transition lo fa SCIVOLARE visibilmente
     btnNo.style.left = nx + 'px';
     btnNo.style.top  = ny + 'px';
 
-    // 4 — Cambia testo
+    // Cambia testo
     btnNo.textContent = noLabels[Math.floor(Math.random() * noLabels.length)];
 
-    // 5 — Mostra messaggio divertente
+    // Messaggio divertente
     showMsg(escapeMsgs[msgIdx % escapeMsgs.length]);
     msgIdx++;
 }
@@ -490,7 +483,6 @@ function showMsg(text) {
     const m = document.createElement('div');
     m.className = 'float-msg';
     m.textContent = text;
-    // Posiziona sopra il bottone
     const r = btnNo.getBoundingClientRect();
     m.style.left = Math.min(r.left, window.innerWidth - 350) + 'px';
     m.style.top  = Math.max(10, r.top - 45) + 'px';
@@ -498,9 +490,8 @@ function showMsg(text) {
     setTimeout(() => m.remove(), 2000);
 }
 
-// Trigger: appena il cursore TOCCA il bottone → scappa
+// Appena il cursore TOCCA il bottone → scappa
 btnNo.addEventListener('mouseenter', escapeNo);
-// Fallback per click (se per miracolo ci arriva)
 btnNo.addEventListener('click', (e) => { e.preventDefault(); escapeNo(); });
 
 // ========================================
@@ -510,25 +501,21 @@ const chars = document.getElementById('chars');
 const celeb = document.getElementById('celeb');
 
 btnSi.addEventListener('click', () => {
-    // Nascondi bottoni
     btns.style.opacity = '0';
     btns.style.pointerEvents = 'none';
     btnNo.style.display = 'none';
 
-    // Avvicina personaggi
     chars.classList.add('together');
 
-    // Mostra celebrazione
     setTimeout(() => {
         celeb.classList.add('on');
         launchConfetti();
-        // Extra cuori
         for (let i = 0; i < 30; i++) setTimeout(spawnHeart, i * 60);
     }, 700);
 });
 
 // ========================================
-//  NAVIGAZIONE: CENA → FINALE
+//  NAVIGAZIONE SCENE
 // ========================================
 const sceneDinner = document.getElementById('sceneDinner');
 const sceneFinale = document.getElementById('sceneFinale');
@@ -559,16 +546,15 @@ document.getElementById('goToFinale').addEventListener('click', () => {
 //  EFFETTI
 // ========================================
 
-// Coriandoli
+// Coriandoli (solo ❤️ come emoji)
 function launchConfetti() {
     const colors = ['#ff1744','#ff5252','#fff','#ffeb3b','#ff4081','#f50057','#ff80ab'];
-    const emojis = ['❤️','💕','💖','✨','🎉','🩷','🤍'];
     for (let i = 0; i < 70; i++) {
         setTimeout(() => {
             const c = document.createElement('div');
             c.className = 'confetti';
-            if (Math.random() > .45) {
-                c.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            if (Math.random() > .5) {
+                c.textContent = '❤️';
                 c.style.fontSize = (12 + Math.random() * 22) + 'px';
             } else {
                 c.style.width = (6 + Math.random() * 12) + 'px';
@@ -584,10 +570,10 @@ function launchConfetti() {
     }
 }
 
-// Pioggia di infiniti (FINALE)
+// Pioggia di infiniti + ❤️ (FINALE)
 function startInfinityRain() {
     const box = document.getElementById('infBox');
-    const syms = ['∞','∞','∞','∞','♾️','🩷','💕'];
+    const syms = ['∞','∞','∞','∞','♾️','❤️'];
     const colors = [
         'rgba(255,23,68,.8)','rgba(255,64,129,.7)','rgba(255,100,150,.6)',
         'rgba(255,255,255,.4)','rgba(255,200,220,.6)','rgba(255,23,68,1)',
