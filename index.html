@@ -112,9 +112,15 @@
         }
         @keyframes msgUp {0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-45px);}}
 
+        /* CELEB BOX — fuori dal flusso flex */
         .celeb-box {
-            text-align: center; opacity: 0; pointer-events: none;
-            transition: opacity 1s ease; margin-top: 20px;
+            position: absolute;
+            left: 50%; top: 55%;
+            transform: translateX(-50%);
+            text-align: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 1s ease;
+            width: 90%; max-width: 600px;
         }
         .celeb-box.on { opacity: 1; pointer-events: auto; }
         .celeb-title {
@@ -165,7 +171,6 @@
             display: flex; gap: 40px; margin-bottom: 35px; flex-wrap: wrap; justify-content: center;
         }
 
-        /* ---------- MENU CARD PULITA ---------- */
         .menu-card {
             position: relative;
             background: rgba(255,255,255,.02);
@@ -180,7 +185,6 @@
             box-shadow: 0 12px 40px rgba(255,23,68,.1);
         }
 
-        /* ---------- ICONA IMMAGINE PULITA ---------- */
         .menu-icon {
             position: relative;
             width: 100px; height: 100px;
@@ -431,7 +435,7 @@ function spawnHeart() {
 setInterval(spawnHeart, 700);
 for (let i = 0; i < 6; i++) setTimeout(spawnHeart, i * 200);
 
-// ===== AUDIO (autoplay, no mute) =====
+// ===== AUDIO =====
 const bgMusic = document.getElementById('bgMusic');
 const emptySound = document.getElementById('emptySound');
 let musicStarted = false;
