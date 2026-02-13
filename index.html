@@ -188,7 +188,6 @@
             box-shadow: 0 12px 35px rgba(255,23,68,.2);
         }
 
-        /* Immagini piatti — stile emoji scontornato */
         .menu-img {
             width: 70px;
             height: 70px;
@@ -197,10 +196,9 @@
             display: block;
             margin-left: auto;
             margin-right: auto;
-            /* Nessun bordo, nessun cerchio, nessuna ombra */
             border: none;
-            border-radius: 0;
-            background: transparent;
+            border-radius: 12px;
+            background: #050000;
         }
 
         .menu-name { color: #ff4081; font-weight: 700; font-size: 1.2em; }
@@ -403,7 +401,7 @@ muteBtn.addEventListener('click', () => {
     else { bgMusic.muted = true; muteBtn.textContent = '🔇'; }
 });
 
-const intro  = document.getElementById('intro');
+const intro = document.getElementById('intro');
 const sceneQ = document.getElementById('sceneQ');
 const twText = document.getElementById('twText');
 
@@ -434,7 +432,7 @@ function typeWrite(str) {
 
 const btnNo = document.getElementById('btnNo');
 const btnSi = document.getElementById('btnSi');
-const btns  = document.getElementById('btns');
+const btns = document.getElementById('btns');
 
 const escapeMsgs = [
     "Hey, quel pulsante NO sta scappando 💨",
@@ -461,15 +459,15 @@ function escapeNo() {
         const r = btnNo.getBoundingClientRect();
         btnNo.style.position = 'fixed';
         btnNo.style.left = r.left + 'px';
-        btnNo.style.top  = r.top + 'px';
+        btnNo.style.top = r.top + 'px';
         btnNo.offsetHeight;
         firstEscape = false;
     }
 
     const pad = 30;
-    const bw  = btnNo.offsetWidth;
-    const bh  = btnNo.offsetHeight;
-    const maxX = window.innerWidth  - bw - pad;
+    const bw = btnNo.offsetWidth;
+    const bh = btnNo.offsetHeight;
+    const maxX = window.innerWidth - bw - pad;
     const maxY = window.innerHeight - bh - pad;
 
     let nx, ny, ok = false, tries = 0;
@@ -484,7 +482,7 @@ function escapeNo() {
     }
 
     btnNo.style.left = nx + 'px';
-    btnNo.style.top  = ny + 'px';
+    btnNo.style.top = ny + 'px';
     btnNo.textContent = noLabels[Math.floor(Math.random() * noLabels.length)];
     showMsg(escapeMsgs[msgIdx % escapeMsgs.length]);
     msgIdx++;
@@ -495,104 +493,4 @@ function showMsg(text) {
     m.className = 'float-msg';
     m.textContent = text;
     const r = btnNo.getBoundingClientRect();
-    m.style.left = Math.min(r.left, window.innerWidth - 350) + 'px';
-    m.style.top  = Math.max(10, r.top - 45) + 'px';
-    document.body.appendChild(m);
-    setTimeout(() => m.remove(), 2000);
-}
-
-btnNo.addEventListener('mouseenter', escapeNo);
-btnNo.addEventListener('click', (e) => { e.preventDefault(); escapeNo(); });
-
-const chars = document.getElementById('chars');
-const celeb = document.getElementById('celeb');
-
-btnSi.addEventListener('click', () => {
-    btns.style.opacity = '0';
-    btns.style.pointerEvents = 'none';
-    btnNo.style.display = 'none';
-    chars.classList.add('together');
-    setTimeout(() => {
-        celeb.classList.add('on');
-        launchConfetti();
-        for (let i = 0; i < 30; i++) setTimeout(spawnHeart, i * 60);
-    }, 700);
-});
-
-const sceneDinner = document.getElementById('sceneDinner');
-const sceneFinale = document.getElementById('sceneFinale');
-
-document.getElementById('goToDinner').addEventListener('click', () => {
-    sceneQ.style.transition = 'opacity 1s';
-    sceneQ.style.opacity = '0';
-    sceneQ.style.pointerEvents = 'none';
-    setTimeout(() => { sceneDinner.classList.add('on'); launchConfetti(); }, 1000);
-});
-
-document.getElementById('goToFinale').addEventListener('click', () => {
-    sceneDinner.style.transition = 'opacity 1.2s';
-    sceneDinner.style.opacity = '0';
-    sceneDinner.style.pointerEvents = 'none';
-    setTimeout(() => {
-        sceneFinale.classList.add('on');
-        startInfinityRain();
-        launchConfetti();
-        for (let i = 0; i < 40; i++) setTimeout(spawnHeart, i * 50);
-    }, 1200);
-});
-
-function launchConfetti() {
-    const colors = ['#ff1744','#ff5252','#fff','#ffeb3b','#ff4081','#f50057','#ff80ab'];
-    for (let i = 0; i < 70; i++) {
-        setTimeout(() => {
-            const c = document.createElement('div');
-            c.className = 'confetti';
-            if (Math.random() > .5) {
-                c.textContent = '❤️';
-                c.style.fontSize = (12 + Math.random() * 22) + 'px';
-            } else {
-                c.style.width = (6 + Math.random() * 12) + 'px';
-                c.style.height = c.style.width;
-                c.style.background = colors[Math.floor(Math.random() * colors.length)];
-                c.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
-            }
-            c.style.left = Math.random() * 100 + 'vw';
-            c.style.animationDuration = (2.5 + Math.random() * 2.5) + 's';
-            document.body.appendChild(c);
-            setTimeout(() => c.remove(), 5500);
-        }, i * 45);
-    }
-}
-
-function startInfinityRain() {
-    const box = document.getElementById('infBox');
-    const syms = ['∞','∞','∞','∞','♾️','❤️'];
-    const colors = [
-        'rgba(255,23,68,.8)','rgba(255,64,129,.7)','rgba(255,100,150,.6)',
-        'rgba(255,255,255,.4)','rgba(255,200,220,.6)','rgba(255,23,68,1)',
-        'rgba(233,30,99,.7)','rgba(255,150,180,.8)'
-    ];
-    for (let i = 0; i < 50; i++) setTimeout(() => spawnInf(box, syms, colors), i * 40);
-    setInterval(() => {
-        for (let i = 0; i < 4; i++) setTimeout(() => spawnInf(box, syms, colors), i * 50);
-    }, 150);
-}
-
-function spawnInf(box, syms, colors) {
-    const el = document.createElement('div');
-    el.className = 'inf-sym';
-    el.textContent = syms[Math.floor(Math.random() * syms.length)];
-    const sz = 20 + Math.random() * 45;
-    const dur = 3 + Math.random() * 5;
-    const op = .4 + Math.random() * .55;
-    el.style.cssText = `
-        left:${Math.random()*100}%;font-size:${sz}px;
-        color:${colors[Math.floor(Math.random()*colors.length)]};
-        animation-duration:${dur}s;--o:${op};
-    `;
-    box.appendChild(el);
-    setTimeout(() => el.remove(), (dur + 1) * 1000);
-}
-</script>
-</body>
-</html>
+    m.style.left = Math.min(r.left, 
