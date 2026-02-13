@@ -160,7 +160,6 @@
             100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
         }
 
-        /* ===== SCENA CENA ===== */
         .scene-dinner {
             position: fixed; inset: 0; background: #050000; z-index: 400;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -189,20 +188,19 @@
             box-shadow: 0 12px 35px rgba(255,23,68,.2);
         }
 
-        /* Immagini piatti custom */
+        /* Immagini piatti — stile emoji scontornato */
         .menu-img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
             margin-bottom: 12px;
-            border: 2px solid rgba(255,23,68,.3);
-            box-shadow: 0 4px 15px rgba(255,23,68,.2);
-            transition: transform .3s ease, box-shadow .3s ease;
-        }
-        .menu-card:hover .menu-img {
-            transform: scale(1.1);
-            box-shadow: 0 6px 25px rgba(255,23,68,.4);
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            /* Nessun bordo, nessun cerchio, nessuna ombra */
+            border: none;
+            border-radius: 0;
+            background: transparent;
         }
 
         .menu-name { color: #ff4081; font-weight: 700; font-size: 1.2em; }
@@ -213,7 +211,6 @@
             margin-bottom: 5px; text-align: center;
         }
 
-        /* ===== SCENA FINALE ===== */
         .scene-finale {
             position: fixed; inset: 0; background: #000; z-index: 600;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -313,7 +310,6 @@
     </div>
 </div>
 
-<!-- 3 · CENA CON IMMAGINI CUSTOM -->
 <div class="scene-dinner" id="sceneDinner">
     <div class="dinner-title">Ma non è finita qui...</div>
     <div class="dinner-sub">
@@ -398,23 +394,13 @@ function startMusic() {
     if (musicStarted) return;
     musicStarted = true;
     bgMusic.volume = 0.5;
-    bgMusic.play().catch(() => {
-        musicStarted = false;
-    });
+    bgMusic.play().catch(() => { musicStarted = false; });
 }
 
 muteBtn.addEventListener('click', () => {
-    if (!musicStarted) {
-        startMusic();
-        return;
-    }
-    if (bgMusic.muted) {
-        bgMusic.muted = false;
-        muteBtn.textContent = '🔊';
-    } else {
-        bgMusic.muted = true;
-        muteBtn.textContent = '🔇';
-    }
+    if (!musicStarted) { startMusic(); return; }
+    if (bgMusic.muted) { bgMusic.muted = false; muteBtn.textContent = '🔊'; }
+    else { bgMusic.muted = true; muteBtn.textContent = '🔇'; }
 });
 
 const intro  = document.getElementById('intro');
@@ -442,9 +428,7 @@ function typeWrite(str) {
             twText.appendChild(cursor);
             i++;
             setTimeout(tick, 65 + Math.random() * 35);
-        } else {
-            setTimeout(() => cursor.remove(), 600);
-        }
+        } else { setTimeout(() => cursor.remove(), 600); }
     })();
 }
 
@@ -501,9 +485,7 @@ function escapeNo() {
 
     btnNo.style.left = nx + 'px';
     btnNo.style.top  = ny + 'px';
-
     btnNo.textContent = noLabels[Math.floor(Math.random() * noLabels.length)];
-
     showMsg(escapeMsgs[msgIdx % escapeMsgs.length]);
     msgIdx++;
 }
@@ -529,9 +511,7 @@ btnSi.addEventListener('click', () => {
     btns.style.opacity = '0';
     btns.style.pointerEvents = 'none';
     btnNo.style.display = 'none';
-
     chars.classList.add('together');
-
     setTimeout(() => {
         celeb.classList.add('on');
         launchConfetti();
@@ -546,10 +526,7 @@ document.getElementById('goToDinner').addEventListener('click', () => {
     sceneQ.style.transition = 'opacity 1s';
     sceneQ.style.opacity = '0';
     sceneQ.style.pointerEvents = 'none';
-    setTimeout(() => {
-        sceneDinner.classList.add('on');
-        launchConfetti();
-    }, 1000);
+    setTimeout(() => { sceneDinner.classList.add('on'); launchConfetti(); }, 1000);
 });
 
 document.getElementById('goToFinale').addEventListener('click', () => {
@@ -595,9 +572,7 @@ function startInfinityRain() {
         'rgba(255,255,255,.4)','rgba(255,200,220,.6)','rgba(255,23,68,1)',
         'rgba(233,30,99,.7)','rgba(255,150,180,.8)'
     ];
-
     for (let i = 0; i < 50; i++) setTimeout(() => spawnInf(box, syms, colors), i * 40);
-
     setInterval(() => {
         for (let i = 0; i < 4; i++) setTimeout(() => spawnInf(box, syms, colors), i * 50);
     }, 150);
