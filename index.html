@@ -65,7 +65,11 @@
         .chars {
             display: flex; align-items: center; gap: 15px;
             margin-bottom: 25px;
-            transition: margin .6s ease;
+            transition: margin .7s ease;
+        }
+        .chars.together {
+            margin-top: -70px;
+            margin-bottom: 18px;
         }
         .char-pic {
             width: 155px; height: 155px; border-radius: 50%; overflow: hidden;
@@ -133,29 +137,24 @@
         }
         @keyframes msgUp {0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-45px);}}
 
-        /* CELEB BOX — posizione assoluta, non influenza il flex */
+        /* CELEB BOX — nel flusso flex, sotto i chars */
         .celeb-box {
-            position: absolute;
-            top: calc(50% + 75px);
-            left: 50%;
-            transform: translateX(-50%);
             text-align: center;
-            width: 90%; max-width: 600px;
             opacity: 0; pointer-events: none;
             transition: opacity 1s ease;
         }
         .celeb-box.on { opacity: 1; pointer-events: auto; }
         .celeb-title {
-            font-family: 'Dancing Script', cursive; font-size: 3.5em; color: #ff1744;
-            text-shadow: 0 0 40px rgba(255,23,68,.55); margin-bottom: 10px;
+            font-family: 'Dancing Script', cursive; font-size: 3.2em; color: #ff1744;
+            text-shadow: 0 0 40px rgba(255,23,68,.55); margin-bottom: 8px;
         }
-        .celeb-text { color: rgba(255,255,255,.85); font-size: 1.3em; line-height: 1.8; font-weight: 600; }
+        .celeb-text { color: rgba(255,255,255,.85); font-size: 1.25em; line-height: 1.8; font-weight: 600; }
         .red { color: #ff1744; }
 
         .btn-next {
-            display: inline-block; margin-top: 30px; padding: 14px 50px;
+            display: inline-block; margin-top: 25px; padding: 14px 50px;
             background: transparent; border: 2px solid #ff1744; color: #ff1744;
-            font-size: 1.2em; font-family: 'Quicksand', sans-serif; font-weight: 700;
+            font-size: 1.15em; font-family: 'Quicksand', sans-serif; font-weight: 700;
             border-radius: 50px; cursor: pointer; transition: all .35s ease;
             opacity: 0; animation: fadeBtn 1s ease 1.5s forwards;
         }
@@ -575,15 +574,15 @@ const chars = document.getElementById('chars');
 const celeb = document.getElementById('celeb');
 
 btnSi.addEventListener('click', () => {
-    // Nascondi testo e bottoni con collasso
+    // Collassa testo e bottoni
     twBox.classList.add('hide');
     btns.classList.add('hide');
     btnNo.style.display = 'none';
 
-    // Avvicina personaggi
+    // Circles si avvicinano e salgono
     chars.classList.add('together');
 
-    // Mostra celebrazione dopo il collasso
+    // Mostra celebrazione
     setTimeout(() => {
         celeb.classList.add('on');
         launchConfetti();
