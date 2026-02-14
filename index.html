@@ -292,55 +292,79 @@
         }
         .cosmic-zoom-overlay.active { opacity: 1; }
 
-        /* ===== SCENA FOTO ===== */
+        /* ===== SCENA FOTO FULLSCREEN ===== */
         .scene-photo {
             position: fixed; inset: 0; background: #000; z-index: 9500;
-            display: flex; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: opacity 2s ease; overflow: hidden;
         }
         .scene-photo.on { opacity: 1; pointer-events: auto; }
-        .photo-particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+
+        .fullscreen-photo {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            image-rendering: high-quality;
+            opacity: 0;
+            transition: opacity 3s ease;
+        }
+        .fullscreen-photo.visible { opacity: 1; }
+
+        /* Glow radiale sopra la foto */
+        .photo-glow-overlay {
+            position: absolute; inset: 0; z-index: 5; pointer-events: none;
+            background:
+                radial-gradient(ellipse at 50% 50%,
+                    rgba(255,23,68,.06) 0%,
+                    rgba(255,68,204,.04) 25%,
+                    transparent 55%),
+                radial-gradient(ellipse at 20% 80%,
+                    rgba(255,23,68,.05) 0%,
+                    transparent 45%),
+                radial-gradient(ellipse at 80% 20%,
+                    rgba(255,68,204,.04) 0%,
+                    transparent 45%);
+            animation: glowShift 8s ease-in-out infinite alternate;
+        }
+        @keyframes glowShift {
+            0% { opacity: .6; }
+            50% { opacity: 1; }
+            100% { opacity: .7; }
+        }
+
+        /* Vignettatura cinematografica */
+        .photo-vignette {
+            position: absolute; inset: 0; z-index: 4; pointer-events: none;
+            background: radial-gradient(ellipse at 50% 50%,
+                transparent 50%,
+                rgba(0,0,0,.2) 70%,
+                rgba(0,0,0,.5) 90%,
+                rgba(0,0,0,.75) 100%);
+        }
+
+        /* Particelle spaziali */
+        .photo-particles {
+            position: absolute; inset: 0; z-index: 10; pointer-events: none; overflow: hidden;
+        }
         .photo-particle {
             position: absolute; border-radius: 50%; pointer-events: none;
             animation: particleDrift linear infinite;
         }
         @keyframes particleDrift {
-            0% { transform: translate(0,0); opacity: 0; }
-            10% { opacity: var(--o,.5); }
-            90% { opacity: calc(var(--o,.5) * .2); }
-            100% { transform: translate(var(--dx,20px), var(--dy,-40px)); opacity: 0; }
+            0% { transform: translate(0, 0) scale(0); opacity: 0; }
+            8% { opacity: var(--o, .5); transform: translate(calc(var(--dx) * .08), calc(var(--dy) * .08)) scale(1); }
+            90% { opacity: calc(var(--o, .5) * .15); }
+            100% { transform: translate(var(--dx), var(--dy)) scale(.3); opacity: 0; }
         }
-        .photo-glow {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-            width: 60vmin; height: 60vmin; border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,23,68,.08) 0%, rgba(255,68,204,.03) 40%, transparent 70%);
-            animation: photoGlow 5s ease-in-out infinite; pointer-events: none;
+
+        /* Mini-stelle scintillanti */
+        .photo-sparkle {
+            position: absolute; pointer-events: none; z-index: 11;
+            width: 2px; height: 2px; border-radius: 50%;
+            animation: sparkleLife ease-in-out infinite;
         }
-        @keyframes photoGlow {
-            0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.5;}
-            50%{transform:translate(-50%,-50%) scale(1.15);opacity:.9;}
-        }
-        .photo-wrapper { position: relative; z-index: 10; }
-        .floating-photo {
-            max-width: 80vw; max-height: 70vh;
-            border-radius: 16px; border: 2px solid rgba(255,23,68,.25);
-            object-fit: contain;
-            box-shadow:
-                0 0 50px rgba(255,23,68,.3),
-                0 0 100px rgba(255,23,68,.1),
-                0 25px 60px rgba(0,0,0,.6);
-            animation: zeroGravity 20s ease-in-out infinite;
-            opacity: 0; transition: opacity 2.5s ease;
-        }
-        .floating-photo.visible { opacity: 1; }
-        @keyframes zeroGravity {
-            0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
-            12% { transform: translateY(-8px) translateX(5px) rotate(0.3deg); }
-            27% { transform: translateY(-3px) translateX(-7px) rotate(-0.15deg); }
-            41% { transform: translateY(-13px) translateX(3px) rotate(0.2deg); }
-            56% { transform: translateY(-5px) translateX(-5px) rotate(-0.1deg); }
-            70% { transform: translateY(-16px) translateX(6px) rotate(0.25deg); }
-            85% { transform: translateY(-2px) translateX(-3px) rotate(-0.05deg); }
+        @keyframes sparkleLife {
+            0%, 100% { opacity: 0; transform: scale(.5); }
+            50% { opacity: var(--o, .8); transform: scale(1.5); }
         }
     </style>
 </head>
@@ -400,289 +424,4 @@
         </div>
     </div>
     <div class="dinner-footer">Perché la mia Coniglietta merita solo il meglio ❤️</div>
-    <button class="btn-next" id="goToFinale">Continua →</button>
-</div>
-
-<div class="scene-finale" id="sceneFinale">
-    <div class="inf-container" id="infBox"></div>
-    <div class="finale-glow"></div>
-    <div class="finale-box">
-        <div class="finale-photos">
-            <img src="https://i.imgur.com/57Zp6wD.jpeg" class="finale-img" alt="Koala">
-            <div class="finale-inf" id="cosmicTrigger">∞</div>
-            <img src="https://i.imgur.com/odRmy9X.jpeg" class="finale-img" alt="Coniglietta">
-        </div>
-        <div class="finale-inf-hint">clicca sull'infinito ✨</div>
-        <div class="finale-title">Per Sempre</div>
-        <div class="finale-sub">
-            Io e te, senza fine <span class="red">∞</span><br>
-            In questa vita e in tutte le altre <span class="red">❤️</span>
-        </div>
-    </div>
-</div>
-
-<div class="scene-cosmic" id="sceneCosmic">
-    <canvas id="cosmicCanvas"></canvas>
-    <div class="cosmic-text">
-        <div class="cosmic-title">Infiniti come l'universo</div>
-        <div class="cosmic-sub">Io e te, per sempre ∞</div>
-    </div>
-    <div class="cosmic-hint" id="cosmicHint">tocca il centro dell'infinito ✨</div>
-    <div class="cosmic-zoom-overlay" id="cosmicZoomOverlay"></div>
-</div>
-
-<div class="scene-photo" id="scenePhoto">
-    <div class="photo-particles" id="photoParticles"></div>
-    <div class="photo-glow"></div>
-    <div class="photo-wrapper">
-        <img src="https://i.imgur.com/HXoUnZa.png" class="floating-photo" id="floatingPhoto" alt="">
-    </div>
-</div>
-
-<audio id="bgMusic" loop preload="auto"><source src="yiruma.mp3.mp3" type="audio/mpeg"></audio>
-<audio id="emptySound" loop preload="auto"><source src="empty.mp3" type="audio/mpeg"></audio>
-
-<script>
-const intro = document.getElementById('intro');
-const sceneQ = document.getElementById('sceneQ');
-const sceneDinner = document.getElementById('sceneDinner');
-const sceneFinale = document.getElementById('sceneFinale');
-const sceneCosmic = document.getElementById('sceneCosmic');
-const scenePhoto = document.getElementById('scenePhoto');
-const chars = document.getElementById('chars');
-const twText = document.getElementById('twText');
-const twBox = document.getElementById('twBox');
-const btns = document.getElementById('btns');
-const btnSi = document.getElementById('btnSi');
-const btnNo = document.getElementById('btnNo');
-const celeb = document.getElementById('celeb');
-const bgMusic = document.getElementById('bgMusic');
-const emptySound = document.getElementById('emptySound');
-let musicStarted = false, msgIdx = 0, firstEscape = true, cosmicZoomed = false;
-
-// ===== RESET =====
-function resetAll() {
-    intro.classList.remove('gone');
-    sceneQ.classList.remove('on');
-    sceneDinner.classList.remove('on');
-    sceneFinale.classList.remove('on');
-    sceneCosmic.classList.remove('on');
-    scenePhoto.classList.remove('on');
-    chars.classList.remove('together');
-    celeb.classList.remove('on');
-    twBox.classList.remove('hide');
-    btns.classList.remove('hide');
-    btnNo.style.cssText = ''; btnNo.textContent = 'No...';
-    firstEscape = true; msgIdx = 0; cosmicZoomed = false;
-    twText.textContent = '';
-    musicStarted = false;
-    bgMusic.pause(); bgMusic.currentTime = 0; bgMusic.volume = 0.5;
-    emptySound.pause(); emptySound.currentTime = 0;
-    document.querySelectorAll('.float-msg,.confetti').forEach(el => el.remove());
-    const infBox = document.getElementById('infBox'); if (infBox) infBox.innerHTML = '';
-    const pp = document.getElementById('photoParticles'); if (pp) pp.innerHTML = '';
-    const fp = document.getElementById('floatingPhoto'); if (fp) fp.classList.remove('visible');
-    const cz = document.getElementById('cosmicZoomOverlay'); if (cz) cz.classList.remove('active');
-    const ch = document.getElementById('cosmicHint'); if (ch) ch.style.opacity = '';
-    const cv = document.getElementById('cosmicCanvas');
-    if (cv) { cv.style.transform = ''; cv.style.transition = ''; cv.style.transformOrigin = ''; }
-}
-window.addEventListener('pageshow', e => { if (e.persisted) window.location.reload(); });
-resetAll();
-
-// ===== STELLE =====
-const starsBox = document.getElementById('starsBox');
-for (let i = 0; i < 90; i++) {
-    const s = document.createElement('div'); s.className = 'star';
-    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;--d:${2+Math.random()*4}s;animation-delay:${Math.random()*3}s;`;
-    starsBox.appendChild(s);
-}
-
-// ===== CUORI =====
-const heartsBox = document.getElementById('heartsBox');
-function spawnHeart() {
-    const h = document.createElement('div'); h.className = 'fl-heart'; h.textContent = '❤️';
-    const dur = 5 + Math.random() * 6;
-    h.style.cssText = `left:${Math.random()*100}%;font-size:${14+Math.random()*18}px;animation-duration:${dur}s;`;
-    heartsBox.appendChild(h); setTimeout(() => h.remove(), dur * 1000 + 500);
-}
-setInterval(spawnHeart, 700);
-for (let i = 0; i < 6; i++) setTimeout(spawnHeart, i * 200);
-
-// ===== AUDIO =====
-function startMusic() {
-    if (musicStarted) return; musicStarted = true;
-    bgMusic.volume = 0.5; bgMusic.play().catch(() => { musicStarted = false; });
-}
-function fadeOutBgMusic(dur, cb) {
-    const sv = bgMusic.volume, steps = 40, st = dur / steps; let step = 0;
-    const f = setInterval(() => { step++; bgMusic.volume = Math.max(0, sv*(1-step/steps));
-        if (step >= steps) { clearInterval(f); bgMusic.pause(); bgMusic.volume = sv; if (cb) cb(); }
-    }, st);
-}
-function fadeInEmptySound(tv, dur) {
-    emptySound.volume = 0; emptySound.currentTime = 0; emptySound.play().catch(() => {});
-    const steps = 40, st = dur / steps; let step = 0;
-    const f = setInterval(() => { step++; emptySound.volume = Math.min(tv, tv*(step/steps));
-        if (step >= steps) clearInterval(f); }, st);
-}
-
-// ===== INTRO =====
-intro.addEventListener('click', () => {
-    startMusic(); intro.classList.add('gone');
-    setTimeout(() => { sceneQ.classList.add('on'); typeWrite('Vuoi essere la mia Valentina?'); }, 1500);
-});
-function typeWrite(str) {
-    let i = 0; twText.textContent = '';
-    const cursor = document.createElement('span'); cursor.className = 'tw-cursor'; twText.appendChild(cursor);
-    (function tick() {
-        if (i < str.length) { twText.textContent = str.slice(0, i+1); twText.appendChild(cursor); i++; setTimeout(tick, 65+Math.random()*35); }
-        else setTimeout(() => cursor.remove(), 600);
-    })();
-}
-
-// ===== NO =====
-const escapeMsgs = ["Hey, quel pulsante NO sta scappando 💨","Il NO è un po' timido 🫣","Ops, è scivolato 🤷🏻","Dai su, lo sai che mi ami ❤️","Non è un'opzione valida 😠","Quasi preso! Ma no 😏...","Koalino ti implora... ❤️","La coniglietta dice SÌ! 🐰🎀","Quel bottone ha le gambe 🦵🏻","Arrendersi è l'unica via ❤️","Sei veloce, ma lui di più ⚡","Hannika ti odierebbe 🐶"];
-const noLabels = ["No...","Nope!","Mai!","Scappo!","🏃💨","Ahah!","Nah!","❌","Prova!","Nope 😜"];
-function escapeNo() {
-    if (firstEscape) { const r = btnNo.getBoundingClientRect(); btnNo.style.position = 'fixed'; btnNo.style.left = r.left+'px'; btnNo.style.top = r.top+'px'; btnNo.offsetHeight; firstEscape = false; }
-    const pad=30,maxX=window.innerWidth-btnNo.offsetWidth-pad,maxY=window.innerHeight-btnNo.offsetHeight-pad;
-    let nx,ny,ok=false,tries=0; const yR=btnSi.getBoundingClientRect();
-    while(!ok&&tries<50){nx=pad+Math.random()*(maxX-pad);ny=pad+Math.random()*(maxY-pad);if(Math.hypot(nx-yR.left,ny-yR.top)>220)ok=true;tries++;}
-    btnNo.style.left=nx+'px';btnNo.style.top=ny+'px';
-    btnNo.textContent=noLabels[Math.floor(Math.random()*noLabels.length)];
-    showMsg(escapeMsgs[msgIdx%escapeMsgs.length]);msgIdx++;
-}
-function showMsg(text){const m=document.createElement('div');m.className='float-msg';m.textContent=text;const r=btnNo.getBoundingClientRect();m.style.left=Math.min(r.left,window.innerWidth-350)+'px';m.style.top=Math.max(10,r.top-45)+'px';document.body.appendChild(m);setTimeout(()=>m.remove(),2000);}
-btnNo.addEventListener('mouseenter',escapeNo);
-btnNo.addEventListener('click',e=>{e.preventDefault();escapeNo();});
-
-// ===== SÌ =====
-btnSi.addEventListener('click', () => {
-    twBox.classList.add('hide'); btns.classList.add('hide'); btnNo.style.display='none';
-    chars.classList.add('together');
-    setTimeout(() => { celeb.classList.add('on'); launchConfetti(); for(let i=0;i<30;i++)setTimeout(spawnHeart,i*60); }, 600);
-});
-
-// ===== NAV =====
-document.getElementById('goToDinner').addEventListener('click', () => {
-    sceneQ.classList.remove('on');
-    setTimeout(() => { sceneDinner.classList.add('on'); launchConfetti(); }, 1500);
-});
-document.getElementById('goToFinale').addEventListener('click', () => {
-    sceneDinner.classList.remove('on');
-    setTimeout(() => { sceneFinale.classList.add('on'); startInfinityRain(); launchConfetti(); for(let i=0;i<40;i++)setTimeout(spawnHeart,i*50); }, 1500);
-});
-document.getElementById('cosmicTrigger').addEventListener('click', () => {
-    sceneFinale.classList.remove('on'); fadeOutBgMusic(1500);
-    setTimeout(() => { sceneCosmic.classList.add('on'); initCosmicInfinity(); setTimeout(()=>fadeInEmptySound(0.6,2000),500); }, 1500);
-});
-
-// ===== EFFETTI =====
-function launchConfetti(){const colors=['#ff1744','#ff5252','#fff','#ffeb3b','#ff4081','#f50057','#ff80ab'];for(let i=0;i<70;i++){setTimeout(()=>{const c=document.createElement('div');c.className='confetti';if(Math.random()>.5){c.textContent='❤️';c.style.fontSize=(12+Math.random()*22)+'px';}else{c.style.width=(6+Math.random()*12)+'px';c.style.height=c.style.width;c.style.background=colors[Math.floor(Math.random()*colors.length)];c.style.borderRadius=Math.random()>.5?'50%':'2px';}c.style.left=Math.random()*100+'vw';c.style.animationDuration=(2.5+Math.random()*2.5)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),5500);},i*45);}}
-
-function startInfinityRain(){const box=document.getElementById('infBox');const syms=['∞','∞','∞','∞','♾️','❤️'];const colors=['rgba(255,23,68,.8)','rgba(255,64,129,.7)','rgba(255,100,150,.6)','rgba(255,255,255,.4)','rgba(255,200,220,.6)','rgba(255,23,68,1)','rgba(233,30,99,.7)','rgba(255,150,180,.8)'];for(let i=0;i<50;i++)setTimeout(()=>spawnInf(box,syms,colors),i*40);setInterval(()=>{for(let i=0;i<4;i++)setTimeout(()=>spawnInf(box,syms,colors),i*50);},150);}
-function spawnInf(box,syms,colors){const el=document.createElement('div');el.className='inf-sym';el.textContent=syms[Math.floor(Math.random()*syms.length)];const sz=20+Math.random()*45,dur=3+Math.random()*5,op=.4+Math.random()*.55;el.style.cssText=`left:${Math.random()*100}%;font-size:${sz}px;color:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${dur}s;--o:${op};`;box.appendChild(el);setTimeout(()=>el.remove(),(dur+1)*1000);}
-
-// ===== PARTICELLE FOTO =====
-function startPhotoParticles() {
-    const container = document.getElementById('photoParticles');
-    function spawn() {
-        const p = document.createElement('div'); p.className = 'photo-particle';
-        const size = 1.5 + Math.random() * 3.5;
-        const dur = 6 + Math.random() * 10;
-        const hue = 300 + Math.random() * 60;
-        const op = .25 + Math.random() * .45;
-        const dx = (Math.random() - .5) * 100;
-        const dy = (Math.random() - .5) * 100;
-        p.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${size}px;height:${size}px;background:hsla(${hue},100%,75%,${op});box-shadow:0 0 ${size*3}px hsla(${hue},100%,65%,.3);--dx:${dx}px;--dy:${dy}px;--o:${op};animation-duration:${dur}s;`;
-        container.appendChild(p);
-        setTimeout(() => p.remove(), dur * 1000);
-    }
-    for (let i = 0; i < 50; i++) setTimeout(spawn, i * 60);
-    setInterval(spawn, 200);
-}
-
-// ===== COSMIC CANVAS =====
-function initCosmicInfinity() {
-    const canvas = document.getElementById('cosmicCanvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    const W = canvas.width, H = canvas.height;
-    const cx = W / 2, cy = H / 2 - 40;
-    const scale = Math.min(W, H) * 0.28;
-    function lemnX(t) { return scale * Math.cos(t) / (1 + Math.sin(t) * Math.sin(t)); }
-    function lemnY(t) { return scale * Math.sin(t) * Math.cos(t) / (1 + Math.sin(t) * Math.sin(t)); }
-
-    const bgStars = []; for (let i=0;i<300;i++) bgStars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+.3,speed:Math.random()*.3+.05,phase:Math.random()*Math.PI*2});
-    const particles = []; for (let i=0;i<400;i++) particles.push({t:(i/400)*Math.PI*2,speed:.008+Math.random()*.018,offset:(Math.random()-.5)*30,offsetY:(Math.random()-.5)*30,size:Math.random()*3+1,hue:290+Math.random()*40,brightness:50+Math.random()*50,alpha:.3+Math.random()*.7,trail:[]});
-    const sparkles = []; for (let i=0;i<120;i++) sparkles.push({t:Math.random()*Math.PI*2,speed:.005+Math.random()*.012,dist:5+Math.random()*50,angle:Math.random()*Math.PI*2,angleSpeed:.02+Math.random()*.05,size:Math.random()*2+.5,hue:280+Math.random()*60,life:Math.random()});
-    const nebulae = []; for (let i=0;i<25;i++) nebulae.push({t:(i/25)*Math.PI*2,speed:.003+Math.random()*.007,size:40+Math.random()*80,hue:280+Math.random()*50,alpha:.02+Math.random()*.04});
-
-    let lastTime = performance.now(), time = 0;
-
-    function animate(now) {
-        const dt = Math.min((now-lastTime)/1000,.05); lastTime=now; time+=dt;
-        const gp = Math.sin(time*1.5)*.3+.7;
-        ctx.fillStyle='rgba(0,0,0,0.08)'; ctx.fillRect(0,0,W,H);
-        bgStars.forEach(s=>{const tw=Math.sin(time*s.speed*10+s.phase)*.5+.5;ctx.beginPath();ctx.arc(s.x,s.y,s.r*tw,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${.2+tw*.6})`;ctx.fill();});
-        nebulae.forEach(n=>{n.t+=n.speed*dt*60;const x=cx+lemnX(n.t),y=cy+lemnY(n.t);const g=ctx.createRadialGradient(x,y,0,x,y,n.size*gp);g.addColorStop(0,`hsla(${n.hue},100%,60%,${n.alpha*gp})`);g.addColorStop(.5,`hsla(${n.hue+20},100%,40%,${n.alpha*.5*gp})`);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(x-n.size,y-n.size,n.size*2,n.size*2);});
-        particles.forEach(p=>{p.t+=p.speed*dt*60;if(p.t>Math.PI*2)p.t-=Math.PI*2;const x=cx+lemnX(p.t)+Math.sin(time*2+p.t)*p.offset*.3,y=cy+lemnY(p.t)+Math.cos(time*2+p.t)*p.offsetY*.3;p.trail.push({x,y});if(p.trail.length>12)p.trail.shift();if(p.trail.length>2){ctx.beginPath();ctx.moveTo(p.trail[0].x,p.trail[0].y);for(let i=1;i<p.trail.length;i++)ctx.lineTo(p.trail[i].x,p.trail[i].y);ctx.strokeStyle=`hsla(${p.hue},100%,${p.brightness}%,${p.alpha*.2})`;ctx.lineWidth=p.size*.5;ctx.stroke();}const gl=ctx.createRadialGradient(x,y,0,x,y,p.size*4*gp);gl.addColorStop(0,`hsla(${p.hue},100%,80%,${p.alpha*gp})`);gl.addColorStop(.4,`hsla(${p.hue},100%,60%,${p.alpha*.4})`);gl.addColorStop(1,'transparent');ctx.fillStyle=gl;ctx.fillRect(x-p.size*4,y-p.size*4,p.size*8,p.size*8);ctx.beginPath();ctx.arc(x,y,p.size*gp,0,Math.PI*2);ctx.fillStyle=`hsla(${p.hue},100%,90%,${p.alpha})`;ctx.fill();});
-        sparkles.forEach(s=>{s.t+=s.speed*dt*60;s.angle+=s.angleSpeed*dt*60;s.life+=dt;const bx=cx+lemnX(s.t),by=cy+lemnY(s.t),x=bx+Math.cos(s.angle)*s.dist,y=by+Math.sin(s.angle)*s.dist,fl=Math.sin(s.life*10)*.5+.5;ctx.beginPath();ctx.arc(x,y,s.size*fl*2,0,Math.PI*2);ctx.fillStyle=`hsla(${s.hue},100%,80%,${fl*.6})`;ctx.fill();const g=ctx.createRadialGradient(x,y,0,x,y,s.size*6);g.addColorStop(0,`hsla(${s.hue},100%,70%,${fl*.2})`);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(x-s.size*6,y-s.size*6,s.size*12,s.size*12);});
-        const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,scale*1.5);cg.addColorStop(0,`hsla(310,100%,60%,${.03*gp})`);cg.addColorStop(.5,`hsla(290,100%,40%,${.015*gp})`);cg.addColorStop(1,'transparent');ctx.fillStyle=cg;ctx.fillRect(0,0,W,H);
-        requestAnimationFrame(animate);
-    }
-    ctx.fillStyle='#000'; ctx.fillRect(0,0,W,H);
-    requestAnimationFrame(animate);
-
-    // ===== CLICK AL CENTRO DELL'INFINITO → ZOOM + FOTO =====
-    const clickRadius = Math.min(W, H) * 0.12;
-
-    canvas.addEventListener('click', (e) => {
-        if (cosmicZoomed) return;
-        const rect = canvas.getBoundingClientRect();
-        const clickX = (e.clientX - rect.left) / rect.width * W;
-        const clickY = (e.clientY - rect.top) / rect.height * H;
-        const dist = Math.hypot(clickX - cx, clickY - cy);
-
-        if (dist < clickRadius) {
-            cosmicZoomed = true;
-
-            // Zoom progressivo dal centro dell'infinito
-            const originX = (cx / W * 100).toFixed(1);
-            const originY = (cy / H * 100).toFixed(1);
-            canvas.style.transformOrigin = `${originX}% ${originY}%`;
-            canvas.style.transition = 'transform 3.5s cubic-bezier(.25,.1,.25,1)';
-            requestAnimationFrame(() => { canvas.style.transform = 'scale(15)'; });
-
-            // Nascondi hint
-            const hint = document.getElementById('cosmicHint');
-            if (hint) hint.style.opacity = '0';
-
-            // Overlay nero con ritardo per vedere lo zoom
-            setTimeout(() => {
-                document.getElementById('cosmicZoomOverlay').classList.add('active');
-            }, 400);
-
-            // Transizione alla scena foto
-            setTimeout(() => {
-                sceneCosmic.classList.remove('on');
-                canvas.style.transform = ''; canvas.style.transition = ''; canvas.style.transformOrigin = '';
-                document.getElementById('cosmicZoomOverlay').classList.remove('active');
-                scenePhoto.classList.add('on');
-                startPhotoParticles();
-                setTimeout(() => {
-                    document.getElementById('floatingPhoto').classList.add('visible');
-                }, 800);
-            }, 3800);
-        }
-    });
-}
-
-window.addEventListener('resize', () => {
-    const canvas = document.getElementById('cosmicCanvas');
-    if (canvas && sceneCosmic.classList.contains('on')) { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-});
-</script>
-</body>
-</html>
+    <button class="btn-next" id="goToFinale">
